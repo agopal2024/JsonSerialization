@@ -1,3 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
+import com.google.gson.Gson;
+
 import graphics.Canvas;
 
 public class Program {
@@ -8,10 +14,26 @@ public class Program {
     // Array of Shapes to be drawn on the canvas.
     private static AllShapes _shapes = new AllShapes();
     
+    private static void loadShapes(String fileName)
+    {
+    	
+    }
+    
+    private static void saveShapes(String fileName) throws FileNotFoundException
+    {
+    	Gson serializer = new Gson();
+    	String jsonContent = serializer.toJson(_shapes);
+    	File f = new File(fileName);
+    	PrintStream writer = new PrintStream(f);
+    	writer.println(jsonContent);
+    	writer.close();
+    }
+    
     /**
      * Main method.
+     * @throws FileNotFoundException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         _canvas.open();
         
         // create a bunch of shapes
@@ -27,6 +49,11 @@ public class Program {
         _shapes.drawShapes(_canvas);
         _canvas.pause();
         
+        saveShapes("victor.json");
+        _canvas.clear();
+        _shapes.translateShapes(15, 18);
+        _shapes.drawShapes(_canvas);
+        _canvas.pause();
         // close the canvas
         _canvas.close();
     }
